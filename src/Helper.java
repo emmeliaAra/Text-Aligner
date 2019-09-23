@@ -11,7 +11,7 @@ public class Helper {
     }
 
     /**
-     * Converts an array of String to a single string.
+     * Converts an array of String to a single string. Add the Break line symbol whenever a new line is added.
      * @param stringArray the array to convert to a string
      * @return a string.
      */
@@ -19,7 +19,7 @@ public class Helper {
     {
         StringBuilder text = new StringBuilder();
         for (String element:stringArray) {
-            text.append(element);
+            text.append(element + "\n");
         }
         return text.toString();
 
