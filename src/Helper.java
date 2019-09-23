@@ -1,13 +1,13 @@
 public class Helper {
 
     /**
-     * Splits the given string into sub parts when space appears.
+     * Splits the given string into sub parts when space appears but also stores the spaces.
      * @param text to split when spaces appear
      * @return the array that is made from the strings that are separated by the spaces.
      */
     public static String[] split(String text)
     {
-        return text.split("\\+s");
+        return text.split("((?<=\\s)|(?=\\s+))");
     }
 
     /**
