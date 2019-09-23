@@ -1,0 +1,27 @@
+public class Helper {
+
+    /**
+     * Splits the given string into sub parts when space appears.
+     * @param text to split when spaces appear
+     * @return the array that is made from the strings that are separated by the spaces.
+     */
+    public static String[] split(String text)
+    {
+        return text.split("\\+s");
+    }
+
+    /**
+     * Converts an array of String to a single string.
+     * @param stringArray the array to convert to a string
+     * @return a string.
+     */
+    public static String convertStringArrayToString(String[] stringArray)
+    {
+        StringBuilder text = new StringBuilder();
+        for (String element:stringArray) {
+            text.append(element);
+        }
+        return text.toString();
+
+    }
+}
