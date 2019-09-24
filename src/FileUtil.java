@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * 
+ *
  * Simple file utility class for reading text files.
- * 
+ *
  * @author jonl
  *
  */
