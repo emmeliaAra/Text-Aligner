@@ -33,7 +33,7 @@ public class AlignText {
             {
                 if(args[2].length() == 1 && (args[2].equalsIgnoreCase("L") || args[2].equalsIgnoreCase("R") ||
                                              args[2].equalsIgnoreCase("C") || args[2].equalsIgnoreCase("H")))
-                    alignMode = args[2].charAt(0);
+                    alignMode = args[2].toUpperCase().charAt(0);
                 else {
                     printMessage();
                     System.exit(0);

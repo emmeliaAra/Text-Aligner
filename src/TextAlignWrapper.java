@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.List;
+
 public class TextAlignWrapper {
 
     private int lineLength;
@@ -18,6 +21,8 @@ public class TextAlignWrapper {
             case 'L': leftAlignment();
                       break;
             case 'R': rightAlignment();
+                break;
+            case 'C': centreAlignment();
                 break;
             default: System.out.print("Not Ready yet");
         }
@@ -63,62 +68,60 @@ public class TextAlignWrapper {
 
         int wordsCounter = 0;
         int currentLineCharCount = 0;
-        int wordsCheckPoint = 0;
-        int wordsToBePrinted = 0;
+        List<String> wordsToPrint = new LinkedList<>();
 
         while (wordsCounter < words.length) {
 
-            //Check if this is a new line
             //Case 1 - Empty line and read space or new line symbol
             //Case 2 - Empty line and word is greater than the limit
             //Case 3 - Used Line and read new line symbol
             //Case 4 - Write on a used line with enough space for the new word
             //Case 5 - Write on a used line with not enough space for the new word
             if (currentLineCharCount == 0 && (words[wordsCounter].matches("\\s+") || words[wordsCounter].matches("\\n")))
-            {
                 wordsCounter++;
-                wordsCheckPoint++;
-                continue;
-            }else if(currentLineCharCount == 0 && words[wordsCounter].length() >= lineLength)
+            else if(currentLineCharCount == 0 && words[wordsCounter].length() >= lineLength)
             {
                 System.out.println(words[wordsCounter]);
                 wordsCounter++;
-                wordsCheckPoint++;
-
             }else if(currentLineCharCount !=0 && words [wordsCounter].matches("\\n")){
 
-                printEmptySpaces(lineLength - currentLineCharCount);
-                for (int i = wordsCheckPoint; i < wordsCheckPoint + wordsToBePrinted; i++) {
-                    System.out.print(words[i]);
+                //if the last element is space remove it
+                if(wordsToPrint.get(wordsToPrint.size()-1).matches("\\s+"))
+                {
+                    currentLineCharCount --;
+                    wordsToPrint.remove(wordsToPrint.size()-1);
                 }
-                wordsCheckPoint += wordsToBePrinted +1;
+                printEmptySpaces(lineLength - currentLineCharCount);
+                for(int i = 0; i<wordsToPrint.size(); i++)
+                    System.out.print(wordsToPrint.get(i));
+
                 currentLineCharCount = 0;
-                wordsToBePrinted = 0;
                 wordsCounter ++;
+                wordsToPrint = new LinkedList<>();
                 System.out.println();
 
             }else if(currentLineCharCount + words[wordsCounter].length() <= lineLength) {
                 currentLineCharCount += words[wordsCounter].length();
-                wordsToBePrinted++;
+                wordsToPrint.add(words[wordsCounter]);
                 wordsCounter++;
+
             }else if(currentLineCharCount + words[wordsCounter].length() > lineLength) {
-                int tempWordsToPrint = wordsToBePrinted;
+
+                int tempWordsToPrint = wordsToPrint.size();
                 int spaces =  lineLength - currentLineCharCount;
 
                 //if the last word is space don't print it
-                if(words[wordsCounter -1].matches("\\s+"))
+                if(wordsToPrint.get(wordsToPrint.size()-1).matches("\\s+"))
                 {
-                    tempWordsToPrint = wordsToBePrinted -1;
+                    tempWordsToPrint = wordsToPrint.size() -1;
                     spaces = lineLength - currentLineCharCount +1;
                 }
                 printEmptySpaces(spaces);
-                for (int i = wordsCheckPoint; i <= wordsCheckPoint + tempWordsToPrint; i++) {
-                    System.out.print(words[i]);
-                }
+                for (int i = 0; i <tempWordsToPrint; i++)
+                    System.out.print(wordsToPrint.get(i));
 
-                wordsCheckPoint += wordsToBePrinted;
                 currentLineCharCount = 0;
-                wordsToBePrinted = 0;
+                wordsToPrint = new LinkedList<>();
                 System.out.println();
             }
         }
@@ -128,6 +131,41 @@ public class TextAlignWrapper {
     {
         for (int i = 0; i < numOfSpaces ; i++)
             System.out.print(" ");
+
+    }
+
+    public void centreAlignment()
+    {
+        int wordsCounter = 0;
+        int currentLineCharCount = 0;
+        List<String> wordsToBePrinted = new LinkedList<>();
+
+        while (wordsCounter < words.length)
+        {
+
+            //Case 1 - Empty line and read space or new line symbol
+            //Case 2 - Empty line and word is greater than the limit
+            //Case 3 - Used Line and read new line symbol
+            //Case 4 - Write on a used line with enough space for the new word
+            //Case 5 - Write on a used line with not enough space for the new word
+            if(currentLineCharCount == 0 && (words[wordsCounter].matches("\\s+") ||  words[wordsCounter].matches("\\n")))
+
+                wordsCounter ++;
+            else if(currentLineCharCount ==0 && words[wordsCounter].length() >=0)
+            {
+                System.out.print(words[wordsCounter]);
+                wordsCounter++;
+            }else if(currentLineCharCount !=0 && words[wordsCounter].matches("\\n"))
+            {
+                //if the last element is space remove it
+                if(wordsToBePrinted.get(wordsToBePrinted.size()-1).matches("\\s+"))
+                {
+                    currentLineCharCount --;
+                    wordsToBePrinted.remove(wordsToBePrinted.size()-1);
+                }
+
+            }
+        }
 
     }
 
