@@ -20,16 +20,18 @@ public class TextAlignWrapper {
         switch (alignMode) {
             case 'L': leftAlignment();
                       break;
-            case 'R': rightAlignment();
+            case 'R': rightAndCentreAlignment(alignMode);
                 break;
-            case 'C': //centreAlignment();
+            case 'C': rightAndCentreAlignment(alignMode);
+                break;
+            case 'H': hyphenating();
                 break;
             default: System.out.print("Not Ready yet");
         }
     }
 
     public void leftAlignment(){
-        //TODO -> new line and next character is \\n....
+
         int charCounter = 0;
         for (String word: words) {
             //Check if the character is the new break line symbol.
@@ -64,23 +66,25 @@ public class TextAlignWrapper {
         }
     }
 
-    public void rightAlignment(){
+    public void rightAndCentreAlignment(char alignmentMode){
 
         int characterCount = 0;
         List<String> wordsToPrint = new LinkedList<>();
         StringBuilder tempLine = new StringBuilder();
         for (String word : words) {
             //Case 1 - If the char is a new line add the current line to the list and start in a new one
-            //Case 2 - If new line and word is bigger than the line length
-            //Case 3 - Used line and words fits
-            //Case 4 - Used line and word does not fits.
+            //Case 2 - If new line and word is a space
+            //Case 3 - If new line and word is bigger than the line length
+            //Case 4 - Used line and words fits
+            //Case 5 - Used line and word does not fits.
 
             if(word.matches("\\n"))
             {
                 characterCount = 0;
                 wordsToPrint.add(tempLine.toString());
                 tempLine = new StringBuilder();
-            }
+            }else if(characterCount == 0 && word.matches("\\s+"))
+                continue;
             else if(characterCount == 0 && word.length() >= lineLength){
 
                     wordsToPrint.add(word);
@@ -103,58 +107,63 @@ public class TextAlignWrapper {
                 }
             }
         }
+
         for (String line: wordsToPrint) {
             //Remove the last space if any.
             if(line.lastIndexOf(" ") == line.length()-1 && line.length()>0)
                 line = line.substring(0, line.length() - 1);
 
             int space = lineLength - line.length();
-            printEmptySpaces(space);
+            if(alignmentMode == 'C')
+                space = space/2 + space%2;
+
+            printSpaces(space);
                 System.out.println(line);
         }
     }
 
-    public void printEmptySpaces(int numOfSpaces)
+    public void hyphenating(){
+
+        int charCounter = 0;
+        for (int i=0; i< words.length; i++) {
+            //Check if the character is the new break line symbol.
+            if(words[i].matches("\\n")) {
+                System.out.println();
+                charCounter = 0;
+                continue;
+            }
+            if(charCounter == 0 && words[i].matches("\\s+"))
+                continue;
+            else if(words[i].length() <= lineLength - charCounter)
+            {
+                System.out.print(words[i]);
+                charCounter += words[i].length();
+                if(lineLength == charCounter)
+                {
+                    System.out.println();
+                    charCounter=0;
+                }
+            }else if(words[i].length() > lineLength - charCounter ){
+
+                int partialCharNumber = lineLength - charCounter-1;
+                String partialWord = words[i].substring(0,partialCharNumber);
+                words[i]= words[i].substring(partialCharNumber);
+                charCounter = 0;
+                if(partialCharNumber>0)
+                    System.out.print(partialWord + "-" + "\n");
+                else
+                    System.out.println();
+                if(words[i].length() !=0)
+                    i= i-1;
+
+            }
+        }
+    }
+
+    public void printSpaces(int numOfSpaces)
     {
         for (int i = 0; i < numOfSpaces ; i++)
             System.out.print(" ");
 
     }
-
-    public void centreAlignment()
-    {
-        int wordsCounter = 0;
-        int currentLineCharCount = 0;
-        List<String> wordsToBePrinted = new LinkedList<>();
-
-        while (wordsCounter < words.length)
-        {
-
-            //Case 1 - Empty line and read space or new line symbol
-            //Case 2 - Empty line and word is greater than the limit
-            //Case 3 - Used Line and read new line symbol
-            //Case 4 - Write on a used line with enough space for the new word
-            //Case 5 - Write on a used line with not enough space for the new word
-            if(currentLineCharCount == 0 && (words[wordsCounter].matches("\\s+") ||  words[wordsCounter].matches("\\n")))
-
-                wordsCounter ++;
-            else if(currentLineCharCount ==0 && words[wordsCounter].length() >=0)
-            {
-                System.out.print(words[wordsCounter]);
-                wordsCounter++;
-            }else if(currentLineCharCount !=0 && words[wordsCounter].matches("\\n"))
-            {
-                //if the last element is space remove it
-                if(wordsToBePrinted.get(wordsToBePrinted.size()-1).matches("\\s+"))
-                {
-                    currentLineCharCount --;
-                    wordsToBePrinted.remove(wordsToBePrinted.size()-1);
-                }
-
-            }
-        }
-
-    }
-
-
 }

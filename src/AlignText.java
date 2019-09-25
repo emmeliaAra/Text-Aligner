@@ -25,7 +25,6 @@ public class AlignText {
                printMessage();
                System.exit(0);
             }
-
             //Set align mode by default to 'L' and then check if there is a third command line argument
             //If there is one get the give alignMode.
             char alignMode = 'L';
