@@ -22,7 +22,7 @@ public class TextAlignWrapper {
                       break;
             case 'R': rightAlignment();
                 break;
-            case 'C': centreAlignment();
+            case 'C': //centreAlignment();
                 break;
             default: System.out.print("Not Ready yet");
         }
@@ -66,64 +66,51 @@ public class TextAlignWrapper {
 
     public void rightAlignment(){
 
-        int wordsCounter = 0;
-        int currentLineCharCount = 0;
+        int characterCount = 0;
         List<String> wordsToPrint = new LinkedList<>();
+        StringBuilder tempLine = new StringBuilder();
+        for (String word : words) {
+            //Case 1 - If the char is a new line add the current line to the list and start in a new one
+            //Case 2 - If new line and word is bigger than the line length
+            //Case 3 - Used line and words fits
+            //Case 4 - Used line and word does not fits.
 
-        while (wordsCounter < words.length) {
-
-            //Case 1 - Empty line and read space or new line symbol
-            //Case 2 - Empty line and word is greater than the limit
-            //Case 3 - Used Line and read new line symbol
-            //Case 4 - Write on a used line with enough space for the new word
-            //Case 5 - Write on a used line with not enough space for the new word
-            if (currentLineCharCount == 0 && (words[wordsCounter].matches("\\s+") || words[wordsCounter].matches("\\n")))
-                wordsCounter++;
-            else if(currentLineCharCount == 0 && words[wordsCounter].length() >= lineLength)
+            if(word.matches("\\n"))
             {
-                System.out.println(words[wordsCounter]);
-                wordsCounter++;
-            }else if(currentLineCharCount !=0 && words [wordsCounter].matches("\\n")){
-
-                //if the last element is space remove it
-                if(wordsToPrint.get(wordsToPrint.size()-1).matches("\\s+"))
-                {
-                    currentLineCharCount --;
-                    wordsToPrint.remove(wordsToPrint.size()-1);
-                }
-                printEmptySpaces(lineLength - currentLineCharCount);
-                for(int i = 0; i<wordsToPrint.size(); i++)
-                    System.out.print(wordsToPrint.get(i));
-
-                currentLineCharCount = 0;
-                wordsCounter ++;
-                wordsToPrint = new LinkedList<>();
-                System.out.println();
-
-            }else if(currentLineCharCount + words[wordsCounter].length() <= lineLength) {
-                currentLineCharCount += words[wordsCounter].length();
-                wordsToPrint.add(words[wordsCounter]);
-                wordsCounter++;
-
-            }else if(currentLineCharCount + words[wordsCounter].length() > lineLength) {
-
-                int tempWordsToPrint = wordsToPrint.size();
-                int spaces =  lineLength - currentLineCharCount;
-
-                //if the last word is space don't print it
-                if(wordsToPrint.get(wordsToPrint.size()-1).matches("\\s+"))
-                {
-                    tempWordsToPrint = wordsToPrint.size() -1;
-                    spaces = lineLength - currentLineCharCount +1;
-                }
-                printEmptySpaces(spaces);
-                for (int i = 0; i <tempWordsToPrint; i++)
-                    System.out.print(wordsToPrint.get(i));
-
-                currentLineCharCount = 0;
-                wordsToPrint = new LinkedList<>();
-                System.out.println();
+                characterCount = 0;
+                wordsToPrint.add(tempLine.toString());
+                tempLine = new StringBuilder();
             }
+            else if(characterCount == 0 && word.length() >= lineLength){
+
+                    wordsToPrint.add(word);
+                    tempLine = new StringBuilder();
+            }else {
+                if(characterCount + word.length() <=lineLength)
+                {
+                    tempLine.append(word);
+                    characterCount += word.length();
+                }else {
+                    wordsToPrint.add(tempLine.toString());
+                    //If new word is space then do not add it at the beginning of the new line.
+                    if(!word.matches("\\s+")){
+                        characterCount = word.length();
+                        tempLine = new StringBuilder(word);
+                    }else {
+                        tempLine = new StringBuilder();
+                        characterCount =0;
+                    }
+                }
+            }
+        }
+        for (String line: wordsToPrint) {
+            //Remove the last space if any.
+            if(line.lastIndexOf(" ") == line.length()-1 && line.length()>0)
+                line = line.substring(0, line.length() - 1);
+
+            int space = lineLength - line.length();
+            printEmptySpaces(space);
+                System.out.println(line);
         }
     }
 
