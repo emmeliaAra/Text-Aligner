@@ -1,32 +1,36 @@
-
+/**
+ * Main class used to align a give text from a file.
+ * @author Emmeleia Arakleitou.
+ */
 public class AlignText {
 
+    /**
+     * Main method that accepts and validates the arguments.
+     * Will either print error message or pass the arguments to the appropriate classes to align the text.
+     * @param args an array that contains command line arguments.
+     */
     public static void main(String[]args){
 
-        //Check the size of args array. If size < 2 print appropriate message.
-        //OtherWise
-        //Read the first argument and parse the second to an integer.
-        //Catch exception if second arg is not a number.
-        //Or throw one if is a negative number
-        if(args.length < 2)
+        /*Check the size of args array. If size < 2 or size >3 print appropriate message.
+         *OtherWise -> Read the first argument and parse the second to an integer.
+         *          -> Catch exception if second arg is not a number.
+         *          -> Or throw one if is <0.
+         */
+        if(args.length < 2 || args.length >3)
             printMessage();
         else{
-
             String fileName = args[0];
             int lineLength = 0;
-
             try{
                 lineLength = Integer.parseInt(args[1]);
                 if(lineLength <0)
                     throw new NumberFormatException();
-
             }catch (NumberFormatException ex)
             {
                printMessage();
                System.exit(0);
             }
             //Set align mode by default to 'L' and then check if there is a third command line argument
-            //If there is one get the give alignMode.
             char alignMode = 'L';
             if(args.length == 3)
             {
@@ -43,10 +47,14 @@ public class AlignText {
             String fileContent = Helper.convertStringArrayToString(fileContentArray);
             String[] words = Helper.split(fileContent);
 
-            TextAlignWrapper textAlignWrapper = new TextAlignWrapper(lineLength,words,alignMode);
+            TextAlignWrapper textAlignWrapper = new TextAlignWrapper(lineLength,words);
+            textAlignWrapper.alignText(alignMode);
             }
     }
 
+    /**
+     * This method prints the error message.
+     */
     public static void printMessage()
     {
         System.out.println("usage: java AlignText file_name line_length [align_mode]");

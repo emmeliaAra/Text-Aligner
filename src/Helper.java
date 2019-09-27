@@ -22,6 +22,15 @@ public class Helper {
             text.append(element + "\n");
         }
         return text.toString();
+    }
 
+    /**
+     * This method is used to print empty spaces and stay in the same line.
+     * @param numOfSpaces the number of spaces to be printed.
+     */
+    public static void printSpaces(int numOfSpaces)
+    {
+        String emptySpaces = new String(new char[numOfSpaces]).replace("\0"," ");
+        System.out.print(emptySpaces);
     }
 }
