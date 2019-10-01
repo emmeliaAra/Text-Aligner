@@ -30,7 +30,9 @@ public class Helper {
      */
     public static void printSpaces(int numOfSpaces)
     {
-        String emptySpaces = new String(new char[numOfSpaces]).replace("\0"," ");
-        System.out.print(emptySpaces);
+        if(numOfSpaces >0) {
+            String emptySpaces = new String(new char[numOfSpaces]).replace("\0", " ");
+            System.out.print(emptySpaces);
+        }
     }
 }
