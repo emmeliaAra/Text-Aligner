@@ -24,12 +24,15 @@ public class TextAlignWrapper {
      * @param alignMode the way that the text will be aligned.
      */
     public void alignText(char alignMode) {
-        if (alignMode == 'H') {
-            hyphenating();
+        if(lineLength > 0){
+            if (alignMode == 'H') {
+                hyphenating();
+            }
+            else {
+                leftRightCenterAlignment(alignMode);
+            }
         }
-        else {
-            leftRightCenterAlignment(alignMode);
-        }
+        System.out.println("Done!!!");
     }
 
     /**
